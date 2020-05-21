@@ -20,7 +20,7 @@ export default function Main() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const [task, setTask] = useTask()
+  const { task, setTask, inputRef, key, setKey } = useTask()
 
   useEffect(() => {
     async function loadTasks() {
@@ -46,11 +46,26 @@ export default function Main() {
   async function handleNewTask() {
     if (task.length <= 0) return;
 
+    if (key.length > 0) {
+      await firebase.database().ref('tasks').child(key).update({ task })
+      
+      setKey('')
+      setTask('')
+      Keyboard.dismiss()
+      return;  
+    }
+
     const tasks = await firebase.database().ref('tasks')
-    const key = tasks.push().key
+    const newKey = tasks.push().key
 
-    tasks.child(key).set({ task })
+    tasks.child(newKey).set({ task })
 
+    setTask('')
+    Keyboard.dismiss()
+  }
+
+  function handleCancelEdit() {
+    setKey('')
     setTask('')
     Keyboard.dismiss()
   }
@@ -59,6 +74,16 @@ export default function Main() {
     <View style={styles.container}>
         <Text style={styles.title}>DO IT!</Text>
 
+        { (key.length > 0) && (
+          <TouchableOpacity 
+          style={styles.cancelButton}
+          onPress={handleCancelEdit}
+          >
+            <MaterialIcons name='cancel' color='#ff0000' size={26} />
+            <Text style={styles.cancelButtonText}>cancelar edição</Text>
+          </TouchableOpacity>
+        ) }
+
         <View style={styles.toDoContainer}>
           <TextInput
           style={styles.toDoInput}
@@ -66,6 +91,7 @@ export default function Main() {
           underlineColorAndroid='transparent'
           value={task}
           onChangeText={text => setTask(text)}
+          ref={inputRef}
           />
 
           <TouchableOpacity

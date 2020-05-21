@@ -1,18 +1,29 @@
-import React, { createContext, useState, useContext } from 'react'
+import React, { createContext, useState, useContext, useRef } from 'react'
 
 const TaskContext = createContext()
 
 export function useTask() {
-    const { task, setTask } = useContext(TaskContext)
+    const context = useContext(TaskContext)
 
-    return [task, setTask]
+    const { task, setTask, key, setKey, inputRef } = context
+
+    return { task, setTask, key, setKey, inputRef }
 }
 
 export default function TaskProvider({ children }) {
     const [task, setTask] = useState('')
+    const [key, setKey] = useState('')
+
+    const inputRef = useRef(null)
     
     return (
-        <TaskContext.Provider value={{ task, setTask }}>
+        <TaskContext.Provider value={{
+            task,
+            setTask,
+            key,
+            setKey,
+            inputRef
+        }}>
             {children}
         </TaskContext.Provider>
     )

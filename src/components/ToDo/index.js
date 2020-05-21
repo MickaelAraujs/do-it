@@ -11,17 +11,19 @@ import { useTask } from '../../contexts/task'
 import styles from './styles'
 
 export default function ToDo({ data }) {
-  const [ , setTask ] = useTask()
+  const { setTask, inputRef, setKey } = useTask()
   
   async function handleDelete() {
     await firebase.database().ref('tasks').child(data.key).remove()
   }
 
   async function handleEdit() {
-    const taskValue = firebase.database().ref('tasks').child(data.key).once('value', snapshot => {
+    await firebase.database().ref('tasks').child(data.key).once('value', snapshot => {
       const { task } = snapshot.val()
 
       setTask(task)
+      inputRef.current.focus()
+      setKey(snapshot.key)
     })
   }
 

@@ -40,5 +40,19 @@ export default StyleSheet.create({
   
     loading: {
       marginTop: 45
+    },
+
+    cancelButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginHorizontal: 45,
+      marginBottom: 10
+    },
+
+    cancelButtonText: {
+      color: '#ff0000',
+      fontWeight: 'bold',
+      fontSize: 18,
+      marginLeft: 5
     }
 })

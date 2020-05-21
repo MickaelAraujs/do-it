@@ -6,17 +6,18 @@ export default StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center',
       width: 325,
-      height: 45,
       backgroundColor: '#ffffff',
       borderRadius: 5,
       padding: 15,
       alignSelf: 'center',
-      marginTop: 15
+      marginTop: 15,
+      marginHorizontal: 30
     },
   
     ToDoTextContainer: {
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      width: 250
     },
   
     toDoText: {
